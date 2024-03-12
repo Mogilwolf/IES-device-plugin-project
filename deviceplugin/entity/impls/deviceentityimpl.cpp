@@ -356,3 +356,22 @@ std::shared_ptr<DeviceEntityDTO> DeviceEntityImpl::updateDeviceDTO() {
 std::shared_ptr<DeviceEntityDTO> DeviceEntityImpl::getDeviceDTO() {
   return _dto;
 }
+
+GetInnerStartPeriodResponse DeviceEntityImpl::getInnerStartPeriod(GetInnerStartPeriodRequest request) {
+    GetInnerStartPeriodResponse response;
+
+    if (_current_state != nullptr) {
+        response = _current_state->getInnerStartPeriod(request);
+    }
+
+    return response;
+}
+GetInnerStartWidthResponse DeviceEntityImpl::getInnerStartWidth(GetInnerStartWidthRequest request) {
+    GetInnerStartWidthResponse response;
+
+    if (_current_state != nullptr) {
+        response = _current_state->getInnerStartWidth(request);
+    }
+
+    return response;
+}

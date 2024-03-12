@@ -66,3 +66,4 @@ std::shared_ptr<DeviceEntity> DeviceEntityFactoryStandaloneImpl1::createDeviceEn
 
   return result;
 }
+

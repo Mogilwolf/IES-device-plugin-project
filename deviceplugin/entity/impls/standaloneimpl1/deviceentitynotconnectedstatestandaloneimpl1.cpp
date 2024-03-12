@@ -1,8 +1,6 @@
 #include "deviceentitynotconnectedstatestandaloneimpl1.h"
 #include "deviceplugin/consts.h"
 
-// TODO: Прописать потом ошибки коннекта
-
 GetChannelDelayResponse DeviceEntityNotConnectedStateStandaloneImpl1::getChannelsDelay(GetChannelDelayRequest request) {
   return GetChannelDelayResponse();
 }
@@ -71,4 +69,10 @@ ErrorCode DeviceEntityNotConnectedStateStandaloneImpl1::loadDeviceDTO(const std:
 
 std::shared_ptr<DeviceEntityDTO> DeviceEntityNotConnectedStateStandaloneImpl1::updateDeviceDTO() {
   return DeviceEntityState::updateDeviceDTO();
+}
+GetInnerStartPeriodResponse DeviceEntityNotConnectedStateStandaloneImpl1::getInnerStartPeriod(GetInnerStartPeriodRequest request) {
+    return GetInnerStartPeriodResponse();
+}
+GetInnerStartWidthResponse DeviceEntityNotConnectedStateStandaloneImpl1::getInnerStartWidth(GetInnerStartWidthRequest request) {
+    return GetInnerStartWidthResponse();
 }

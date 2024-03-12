@@ -16,6 +16,17 @@ DeviceController::DeviceController(const std::shared_ptr<DeviceView> &test_devic
 
 void DeviceController::setConnections() {
   if (_device_cb_factory != nullptr) {
+      auto inner_start_period_callback = _device_cb_factory->getInnerStartPeriodCallback();
+      if (inner_start_period_callback != nullptr) {
+          QObject::connect(inner_start_period_callback.get(), &ULong64ValueCallback::statusChanged,
+                           this, &DeviceController::innerStartPeriodModelChangedSlot);
+      }
+      auto inner_start_width_callback = _device_cb_factory->getInnerStartWidthCallback();
+      if (inner_start_width_callback != nullptr) {
+          QObject::connect(inner_start_width_callback.get(), &ULong64ValueCallback::statusChanged,
+                           this, &DeviceController::innerStartWidthModelChangedSlot);
+      }
+
     auto sync_des_lock_callback = _device_cb_factory->getSyncDesLockCallback();
     if (sync_des_lock_callback != nullptr) {
       QObject::connect(sync_des_lock_callback.get(), &BoolValueCallback::statusChanged,
@@ -136,14 +147,23 @@ void DeviceController::setConnections() {
 //                     this, &DeviceController::cpsStatusViewChanged);
 //  }
 }
-
+void DeviceController::innerStartPeriodModelChangedSlot(quint64 value) {
+    if (_device_view != nullptr) {
+        _device_view->setInnerStartPeriod(value);
+    }
+}
+void DeviceController::innerStartWidthModelChangedSlot(quint64 value) {
+    if (_device_view != nullptr) {
+        _device_view->setInnerStartWidth(value);
+    }
+}
 void DeviceController::channelNameChangedViewSlot(int channel_num, const QString &value) {
   if (_use_case_factory != nullptr) {
     auto set_channel_name_use_case = _use_case_factory->createSetChannelNameUseCase();
     if (set_channel_name_use_case != nullptr) {
       SetChannelNameUseCaseRequest request{channel_num, value};
       auto response = set_channel_name_use_case->execute(request);
-      // TODO: Добавить обработку ошибок
+
 
       if (response.error_code == SUCCESS) {
         if (_device_view != nullptr) {
@@ -165,7 +185,7 @@ void DeviceController::channelEnabledStatusChangedViewSlot(int channel_num, bool
     if (set_channel_enabled_status_use_case != nullptr) {
       SetChannelEnabledStatusUseCaseRequest request{channel_num, value};
       auto response = set_channel_enabled_status_use_case->execute(request);
-      // TODO: Добавить обработку ошибок
+
 
     } else {
       qWarning() << "set_channel_enabled_status_use_case is not created " << __func__;

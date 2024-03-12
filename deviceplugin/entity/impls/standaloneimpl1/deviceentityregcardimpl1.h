@@ -40,8 +40,10 @@ class DeviceEntityRegCardImpl1: public DeviceEntityRegCard {
   SetChannelStartSourceResponse setChannelStartSource(SetChannelStartSourceRequest request) override;
   SetChannelStartModeResponse setChannelStartMode(SetChannelStartModeRequest request) override;
 
-  int getChannelCount() override;
+  GetInnerStartPeriodResponse getInnerStartPeriod(GetInnerStartPeriodRequest request) override;
+  GetInnerStartWidthResponse getInnerStartWidth(GetInnerStartWidthRequest request) override;
 
+  int getChannelCount() override;
   void updateRegCard() override;
   ErrorCode loadDeviceDTO(const std::shared_ptr<DeviceEntityDTO> &dto) override;
   std::shared_ptr<DeviceEntityDTO> updateDeviceDTO() override;

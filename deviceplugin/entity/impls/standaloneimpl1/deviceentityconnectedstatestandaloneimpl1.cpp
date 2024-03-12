@@ -183,8 +183,7 @@ SetChannelStartModeResponse DeviceEntityConnectedStateStandaloneImpl1::setChanne
 }
 
 ErrorCode DeviceEntityConnectedStateStandaloneImpl1::loadDeviceDTO(const std::shared_ptr<DeviceEntityDTO> &dto) {
-  // TODO: В мобдас враппере добавить функционал отложенной множественной записи. Чтобы можно было писать много регистров за раз из массива, который заполняется постепенно
-  //  Как вариант, можно написать ещё одну обертку modbus, где это будет реализовано
+
 
   ErrorCode result = OPERATION_INTERRUPTED;
   std::cout << "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT" << std::endl;
@@ -241,6 +240,24 @@ ErrorCode DeviceEntityConnectedStateStandaloneImpl1::loadDeviceDTO(const std::sh
 }
 
 std::shared_ptr<DeviceEntityDTO> DeviceEntityConnectedStateStandaloneImpl1::updateDeviceDTO() {
-  // TODO: Дописать процесс формирования DTO
+
   return DeviceEntityState::updateDeviceDTO();
+}
+GetInnerStartPeriodResponse DeviceEntityConnectedStateStandaloneImpl1::getInnerStartPeriod(GetInnerStartPeriodRequest request) {
+    GetInnerStartPeriodResponse response;
+
+    if (_reg_card != nullptr) {
+        response = _reg_card->getInnerStartPeriod(request);
+    }
+
+    return response;
+}
+GetInnerStartWidthResponse DeviceEntityConnectedStateStandaloneImpl1::getInnerStartWidth(GetInnerStartWidthRequest request) {
+    GetInnerStartWidthResponse response;
+
+    if (_reg_card != nullptr) {
+        response = _reg_card->getInnerStartWidth(request);
+    }
+
+    return response;
 }

@@ -33,7 +33,11 @@ void DeviceEntityPoll::process() {
   SyncModuleStatusesPoll();
   SyncSFPStatusesPoll();
 
-  channelDelaysPoll();
+  innerStartPeriodPoll();
+  innerStartWidthPoll();
+
+
+    channelDelaysPoll();
   channelWidthsPoll();
   channelEnabledStatusesPoll();
   channelInvertedStatusesPoll();
@@ -113,7 +117,6 @@ void DeviceEntityPoll::channelDelaysPoll() {
       GetChannelDelayRequest entity_request{i};
       auto entity_response = _device_entity->getChannelsDelay(entity_request);
 
-      // TODO: Добавить здесь перехват ошибки
       uint64_t value = entity_response.result;
       delay_values.push_back(value);
     }
@@ -135,7 +138,6 @@ void DeviceEntityPoll::channelWidthsPoll() {
       GetChannelWidthRequest entity_request{i};
       auto entity_response = _device_entity->getChannelsWidth(entity_request);
 
-      // TODO: Добавить здесь перехват ошибки
       uint64_t value = entity_response.result;
       values.push_back(value);
     }
@@ -157,7 +159,6 @@ void DeviceEntityPoll::channelStartSourcesPoll() {
       GetChannelStartSourceRequest entity_request{i};
       auto entity_response = _device_entity->getChannelsStartSource(entity_request);
 
-      // TODO: Добавить здесь перехват ошибки
       int16_t value = entity_response.result;
       values.push_back(value);
     }
@@ -179,7 +180,6 @@ void DeviceEntityPoll::channelStartModesPoll() {
       GetChannelStartModeRequest entity_request{i};
       auto entity_response = _device_entity->getChannelsStartMode(entity_request);
 
-      // TODO: Добавить здесь перехват ошибки
       auto value = static_cast<ChannelMode>(entity_response.result);
       values.push_back(value);
     }
@@ -201,7 +201,6 @@ void DeviceEntityPoll::channelEnabledStatusesPoll() {
       GetChannelEnabledStatusRequest entity_request{i};
       auto entity_response = _device_entity->getChannelsEnabledStatus(entity_request);
 
-      // TODO: Добавить здесь перехват ошибки
       bool value = entity_response.result;
       values.push_back(value);
     }
@@ -223,7 +222,6 @@ void DeviceEntityPoll::channelInvertedStatusesPoll() {
       GetChannelInvertedStatusRequest entity_request{i};
       auto entity_response = _device_entity->getChannelsInvertedStatus(entity_request);
 
-      // TODO: Добавить здесь перехват ошибки
       bool value = entity_response.result;
       values.push_back(value);
     }
@@ -244,7 +242,6 @@ void DeviceEntityPoll::channelNamesPoll() {
       GetChannelNameRequest entity_request{i};
       auto entity_response = _device_entity->getChannelName(entity_request);
 
-      // TODO: Добавить здесь перехват ошибки
       auto value = entity_response.result;
       values.push_back(QString::fromStdString(value));
     }
@@ -252,4 +249,39 @@ void DeviceEntityPoll::channelNamesPoll() {
     callback->pushEvent(values);
     qDebug() << "CALLBACK CHANNEL DELAY PUSHED " << __func__;
   }
+
+}
+void DeviceEntityPoll::innerStartWidthPoll() {
+    if (_device_entity != nullptr) {
+        GetInnerStartWidthRequest request{};
+        auto response = _device_entity->getInnerStartWidth(request);
+
+        if (response.error_code != SUCCESS) {
+            return ;
+        }
+
+        if (_callback_sub_factory != nullptr) {
+            auto callback = _callback_sub_factory->getInnerStartWidthCallback();
+            if (callback != nullptr) {
+                callback->pushEvent(response.result);
+            }
+        }
+    }
+}
+void DeviceEntityPoll::innerStartPeriodPoll() {
+    if (_device_entity != nullptr) {
+        GetInnerStartPeriodRequest request{};
+        auto response = _device_entity->getInnerStartPeriod(request);
+
+        if (response.error_code != SUCCESS) {
+            return ;
+        }
+
+        if (_callback_sub_factory != nullptr) {
+            auto callback = _callback_sub_factory->getInnerStartPeriodCallback();
+            if (callback != nullptr) {
+                callback->pushEvent(response.result);
+            }
+        }
+    }
 }

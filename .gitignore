@@ -2,3 +2,4 @@ build/
 cmake-build-debug/
 /build-release/
 .idea
+lib/
